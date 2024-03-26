@@ -1,8 +1,11 @@
+import Chai from './Chai'
+
 function App() {
     return (
-        <div>
+        <>
             <h1>Chai aur Code - React | Abhilash</h1>
-        </div>
+            <Chai />
+        </>
     );
 }
 

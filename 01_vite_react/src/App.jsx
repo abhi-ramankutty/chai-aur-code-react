@@ -1,12 +1,10 @@
-import { useState } from 'react';
+import Chai from './Chai';
 
 function App() {
-    const [count, setCount] = useState(0);
-
     return (
         <>
-            <h1>Chai aur Code - React(vite) | Abhilash</h1>
-            <div>Test description</div>
+            <h1>Chai aur Code - React</h1>
+            <Chai></Chai>
         </>
     );
 }
