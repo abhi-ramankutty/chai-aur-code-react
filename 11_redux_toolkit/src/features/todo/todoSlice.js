@@ -7,6 +7,7 @@ const initialState = {
             text: 'Hello world',
         },
     ],
+    editMode: null,
 };
 
 export const todoSlice = createSlice({
@@ -25,10 +26,13 @@ export const todoSlice = createSlice({
                 (todoItem) => todoItem.id !== action.payload.id
             );
         },
+        triggerEdit: (state, action) => {
+            state.editMode = action.payload;
+        },
         updateTodo: (state, action) => {
             state.todos = state.todos.map((todoItem) => {
                 if (todoItem.id === action.payload.id) {
-                    return {...todoItem, ...action.payload.text};
+                    return {...action.payload};
                 }
                 return todoItem;
             });
@@ -36,6 +40,6 @@ export const todoSlice = createSlice({
     },
 });
 
-export const {addTodo, deleteTodo, updateTodo} = todoSlice.actions;
+export const {addTodo, deleteTodo, updateTodo, triggerEdit} = todoSlice.actions;
 
 export default todoSlice.reducer;

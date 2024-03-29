@@ -1,21 +1,35 @@
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {addTodo} from '../features/todo/todoSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addTodo, triggerEdit, updateTodo} from '../features/todo/todoSlice';
+import {useEffect} from 'react';
 
 function AddTodo() {
     const [input, setInput] = useState('');
     const dispatch = useDispatch();
+    const todoEditMode = useSelector((state) => state.editMode);
 
     const addTodoHandler = (e) => {
-        console.log(input)
         e.preventDefault();
         dispatch(addTodo({text: input}));
         setInput('');
     };
 
+    const editTodoHandler = (e) => {
+        e.preventDefault();
+        dispatch(updateTodo({id: todoEditMode.id, text: input}));
+        setInput('');
+        dispatch(triggerEdit(null));
+    };
+
+    useEffect(() => {
+        if (todoEditMode) {
+            setInput(todoEditMode.text);
+        }
+    }, [todoEditMode]);
+
     return (
         <form
-            onSubmit={addTodoHandler}
+            onSubmit={todoEditMode ? editTodoHandler : addTodoHandler}
             className='space-x-3 mt-12'
         >
             <input
@@ -29,7 +43,7 @@ function AddTodo() {
                 type='submit'
                 className='text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'
             >
-                Add Todo
+                {todoEditMode ? 'Update' : 'Add Todo'}
             </button>
         </form>
     );
