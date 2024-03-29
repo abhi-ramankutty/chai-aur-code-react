@@ -7,10 +7,12 @@ function AddTodo() {
     const dispatch = useDispatch();
 
     const addTodoHandler = (e) => {
+        console.log(input)
         e.preventDefault();
-        dispatch(addTodo(input));
+        dispatch(addTodo({text: input}));
         setInput('');
     };
+
     return (
         <form
             onSubmit={addTodoHandler}
