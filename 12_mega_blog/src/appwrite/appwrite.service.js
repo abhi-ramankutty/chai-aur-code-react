@@ -29,7 +29,7 @@ class AppwriteService {
         }
     }
 
-    async updatePost({title, slug, content, featuredImg, status}) {
+    async updatePost(slug, {title, content, featuredImg, status}) {
         try {
             return await this.databases.updateDocument(
                 config.appwriteDatabaseId,
@@ -70,9 +70,16 @@ class AppwriteService {
         }
     }
 
+    /**
+     * ### getAllPosts
+     * @param {*} queries 
+     * 
+     * Gets you all the post form the db based on the queries you pass
+     * default queries = [Query.equal('status', ['active'])]
+     */
     async getAllPosts(queries = [Query.equal('status', ['active'])]) {
         try {
-            this.databases.listDocuments(
+            return await this.databases.listDocuments(
                 config.appwriteDatabaseId,
                 config.appwriteBucketId,
                 queries
