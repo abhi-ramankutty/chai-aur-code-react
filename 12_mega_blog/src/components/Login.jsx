@@ -23,7 +23,9 @@ function Login() {
                     navigate('/');
                 }
             }
-        } catch (error) {}
+        } catch (error) {
+            setError(error.message);
+        }
     };
     return (
         <div className='flex items-center justify-center w-full'>
@@ -49,7 +51,7 @@ function Login() {
                         Sign Up
                     </Link>
                 </p>
-                {{if(condition) {}}}
+                {/* {{if(condition) {}}} */}
                 {error && (
                     <p className='text-red-600 mt-8 text-center'>{error}</p>
                 )}

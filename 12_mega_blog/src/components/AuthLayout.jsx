@@ -23,5 +23,5 @@ export default function AuthLayout({children, authentication = true}) {
         setLoading(false);
     }, [isLoggedIn, navigate, authentication]);
 
-    return <div>AuthLayout</div>;
+    return loding ? <h1>Loading...</h1> : <>{children}</>
 }

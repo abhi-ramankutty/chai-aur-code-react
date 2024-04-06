@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import appwriteService from '../appwrite/appwrite.service';
 import {Container, PostCard} from '../components';
 
 function AllPostsPage() {
     const [allPosts, setAllPosts] = useState([]);
-    appwriteService.getAllPosts([]).then((posts) => {
-        if (posts) {
-            setAllPosts(posts.documents);
-        }
-    });
+    useEffect(() => {
+        appwriteService.getAllPosts([]).then((posts) => {
+            console.log('AllPostPage');
+            if (posts) {
+                setAllPosts(posts.documents);
+            }
+        });
+    }, []);
     return (
         <div className='w-full py-8'>
             <Container>
@@ -19,7 +22,7 @@ function AllPostsPage() {
                                 key={post.$id}
                                 className='p-2 w-1/4'
                             >
-                                <PostCard post={post}/>
+                                <PostCard {...post} />
                             </div>
                         );
                     })}

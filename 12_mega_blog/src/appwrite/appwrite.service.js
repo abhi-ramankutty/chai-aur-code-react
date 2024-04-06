@@ -15,13 +15,13 @@ class AppwriteService {
         this.storage = new Storage(this.client);
     }
 
-    async createPost({title, slug, content, featuredImg, status, userId}) {
+    async createPost({title, slug, content, featuredImage, status, userId}) {
         try {
             return await this.databases.createDocument(
                 config.appwriteDatabaseId,
-                config.appwriteBucketId,
+                config.appwriteCollectionId,
                 slug,
-                {title, content, featuredImg, status, userId}
+                {title, content, featuredImage, status, userId}
             );
         } catch (error) {
             console.log('Appwrite Service :: createPost :: error', error);
@@ -29,13 +29,13 @@ class AppwriteService {
         }
     }
 
-    async updatePost(slug, {title, content, featuredImg, status}) {
+    async updatePost(slug, {title, content, featuredImage, status}) {
         try {
             return await this.databases.updateDocument(
                 config.appwriteDatabaseId,
-                config.appwriteBucketId,
+                config.appwriteCollectionId,
                 slug,
-                {title, content, featuredImg, status}
+                {title, content, featuredImage, status}
             );
         } catch (error) {
             console.log('Appwrite Service :: updatePost :: error', error);
@@ -47,7 +47,7 @@ class AppwriteService {
         try {
             await this.databases.deleteDocument(
                 config.appwriteDatabaseId,
-                config.appwriteBucketId,
+                config.appwriteCollectionId,
                 slug
             );
             return true;
@@ -61,7 +61,7 @@ class AppwriteService {
         try {
             return await this.databases.getDocument(
                 config.appwriteDatabaseId,
-                config.appwriteBucketId,
+                config.appwriteCollectionId,
                 slug
             );
         } catch (error) {
@@ -81,7 +81,7 @@ class AppwriteService {
         try {
             return await this.databases.listDocuments(
                 config.appwriteDatabaseId,
-                config.appwriteBucketId,
+                config.appwriteCollectionId,
                 queries
             );
         } catch (error) {

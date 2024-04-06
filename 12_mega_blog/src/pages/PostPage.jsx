@@ -1,22 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {useNavigate, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import appwriteService from '../appwrite/appwrite.service';
+import parse from 'html-react-parser';
+import {Button, Container} from '../components';
 
 function PostPage() {
     const [post, setPost] = useState(null);
-    const {slug} = useParam();
+    const [featuredImage, setFeaturedImage] = useState('');
+
+    const {slug} = useParams();
     const navigate = useNavigate();
 
-    const userData = useSelector((state) => state.auth.userData);
+    const userData = useSelector((state) => state.userData);
 
     const isAuthor = post && userData ? post.userId === userData.$id : false;
 
     useEffect(() => {
         if (slug) {
             appwriteService.getPost(slug).then((post) => {
-                if (post) setPost(post);
-                else navigate('/');
+                if (post) {
+                    setPost(post);
+                    appwriteService
+                        .getFilePreview(post.featuredImage)
+                        .then((a) => {
+                            setFeaturedImage(a);
+                        });
+                } else navigate('/');
             });
         } else navigate('/');
     }, [slug, navigate]);
@@ -34,7 +44,7 @@ function PostPage() {
             <Container>
                 <div className='w-full flex justify-center mb-4 relative border rounded-xl p-2'>
                     <img
-                        src={appwriteService.getFilePreview(post.featuredImage)}
+                        src={featuredImage}
                         alt={post.title}
                         className='rounded-xl'
                     />

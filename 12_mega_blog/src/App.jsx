@@ -5,6 +5,7 @@ import authService from './appwrite/auth.service';
 import {useEffect} from 'react';
 import {login, logout} from './store/auth.slice';
 import {Footer, Header} from './components/index';
+import {Outlet} from 'react-router-dom';
 function App() {
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
@@ -36,7 +37,9 @@ function App() {
             <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
                 <div className='w-full block'>
                     <Header />
-                    TODO
+                    <main>
+                        <Outlet />
+                    </main>
                     <Footer />
                 </div>
             </div>

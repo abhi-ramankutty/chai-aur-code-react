@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Button, Input, RTE, Select} from '../index';
 import appwriteService from '../../appwrite/appwrite.service';
@@ -7,12 +7,13 @@ import {useSelector} from 'react-redux';
 
 function PostForm({post}) {
     const navigate = useNavigate();
-    const [userData, setUserData] = useSelector((data) => data.userData);
+    const [featuredImage, setFeaturedImage] = useState('');
+    const userData = useSelector((data) => data.userData);
     const {register, handleSubmit, watch, setValue, control, getValues} =
         useForm({
             defaultValues: {
                 title: post?.title || '',
-                slug: post?.slug || '',
+                slug: post?.$id || '',
                 content: post?.content || '',
                 status: post?.status || 'active',
             },
@@ -20,24 +21,25 @@ function PostForm({post}) {
 
     const submit = async (data) => {
         if (post) {
-            const file = data.images[0]
+            const file = data.image[0]
                 ? await appwriteService.uploadFile(data.image[0])
                 : null;
             if (file) {
-                appwriteService.deleteFile(post.featuredImg);
+                appwriteService.deleteFile(post.featuredImage);
             }
             const dbPost = await appwriteService.updatePost(post.$id, {
                 ...data,
-                featuredImg: file ? file.$id : undefined,
+                featuredImage: file ? file.$id : undefined,
             });
             if (dbPost) {
-                navigate(`/posts/${dbPost.$id}`);
+                navigate(`/post/${dbPost.$id}`);
             }
         } else {
             const file = await appwriteService.uploadFile(data.image[0]);
             if (file) {
+                console.log(file);
                 const fileId = file.$id;
-                data.featuredImg = fileId;
+                data.featuredImage = fileId;
                 const dbPost = await appwriteService.createPost({
                     ...data,
                     userId: userData.$id,
@@ -54,7 +56,7 @@ function PostForm({post}) {
             return value
                 .trim()
                 .toLowerCase()
-                .replace(/^[\w]+/gm, '-');
+                .replace(/[^\w]+/gm, '-');
         } else {
             return '';
         }
@@ -68,6 +70,11 @@ function PostForm({post}) {
                 });
             }
         });
+        if (post && post.featuredImage) {
+            appwriteService.getFilePreview(post.featuredImage).then((img) => {
+                setFeaturedImage(img);
+            });
+        }
 
         return () => {
             subscription.unsubscribe();
@@ -114,9 +121,7 @@ function PostForm({post}) {
                 {post && (
                     <div className='w-full mb-4'>
                         <img
-                            src={appwriteService.getFilePreview(
-                                post.featuredImage
-                            )}
+                            src={featuredImage}
                             alt={post.title}
                             className='rounded-lg'
                         />
