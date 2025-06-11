@@ -10,5 +10,4 @@ function Profile() {
 		return <div>Please Login</div>;
 	}
 }
-
 export default Profile;
