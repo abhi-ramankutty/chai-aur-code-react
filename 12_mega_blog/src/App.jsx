@@ -1,16 +1,39 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import authService from './appwrite/auth';
 import './App.css';
+import { login, logout } from './store/auth-slice';
+import { Footer, Header } from './components';
 
 function App() {
-	const [count, setCount] = useState(0);
+	const [isLoading, setIsLoading] = useState(true);
+	const dispatch = useDispatch();
 
-    console.log(import.meta.env.VITE_APPWRITE_ENDPOINT)
-	return (
-		<>
-			<h1>Blog with Appwrite</h1>
-		</>
+	useEffect(() => {
+		authService
+			.getCurrentUser()
+			.then((userData) => {
+				dispatch(login({ userData }));
+			})
+			.catch(() => {
+				dispatch(logout());
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	}, []);
+
+	return !isLoading ? (
+		<div className=''>
+			<div className=''>
+				<Header />
+				Outlet
+				<Footer />
+			</div>
+		</div>
+	) : (
+		<div>Loading...</div>
 	);
 }
 
