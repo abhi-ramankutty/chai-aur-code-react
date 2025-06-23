@@ -28,7 +28,6 @@ function App() {
 		<div className=''>
 			<div className=''>
 				<Header />
-				Outlet
 				<Footer />
 			</div>
 		</div>
