@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import authService from './appwrite/auth';
 import './App.css';
 import { login, logout } from './store/auth-slice';
-import { Footer, Header } from './components';
+import { Footer, Header, SignUp, AuthLayout } from './components';
 
 function App() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +28,7 @@ function App() {
 		<div className=''>
 			<div className=''>
 				<Header />
+                <AuthLayout/>
 				<Footer />
 			</div>
 		</div>

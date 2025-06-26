@@ -1,10 +1,17 @@
 import { useId } from 'react';
 
-function Input({ type = 'text', label = '', placeholder = '', ref, ...props }) {
+function Input({
+	type = 'text',
+	label = '',
+	placeholder = '',
+	className = '',
+	ref,
+	...props
+}) {
 	const id = useId();
 	return (
-		<div className='w-full'>
-			{label && <label htmlFor={id}></label>}
+		<div className='w-full flex flex-col items-start'>
+			{label && <label htmlFor={id}>{label}</label>}
 			<input
 				type={type}
 				id={id}
